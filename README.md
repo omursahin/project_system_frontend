@@ -1,72 +1,119 @@
-# Getting Started with Create React App
+# Proje Dizin Yapısı
 
-# https://react-bootstrap.github.io/getting-started/introduction/
+* Tüm bileşenlerinizi 'src' (kaynak) klasöründe tutun.
+- Her bileşen için ayrı bir klasör oluşturun ve içerisine bileşenin JavaScript dosyasını ve varsa CSS dosyasını koyun.
+- Yardımcı dosyaları (util, constant, vb.) ayrı bir klasörde tutun.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Bileşen İsimlendirme
 
-## Available Scripts
+* Bileşen dosyalarını PascalCase olarak adlandırın. Örneğin, "Header.js" veya "Navbar.js".
+* Bileşen dosyasının içindeki bileşen fonksiyonunu ve değişkenlerini camelCase olarak adlandırın.
 
-In the project directory, you can run:
+# İçerik Düzenleme
+
+* Her bileşenin içeriği, ilgili bileşenin dosyasında tutulmalıdır.
+* İlgili bileşenin dışında kullanılmayacak özellikleri bileşenin içinde tutun.
+* Eğer bir bileşen çok büyükse, alt bileşenlere ayırın ve alt bileşenlerin klasörlerinde tutun.
+
+# Bileşen İçinde Sıralama
+
+* İçerikler sırasıyla eşleşen JSX, CSS ve diğer fonksiyonlar şeklinde düzenlenmelidir.
+* JSX içindeki öğeler, HTML benzeri bir yapıda düzenlenmelidir.
+* JSX içinde kullanılan CSS sınıflarını veya stil özelliklerini ayrı bir dosyada tanımlayın ve bu dosyayı bileşene ekleyin.
+
+# Tanımlayıcılar ve Stiller
+
+* Değişken ve fonksiyon adlandırmalarını camelCase olarak yapın.
+* CSS sınıflarını tanımlamak için BEM (Block Element Modifier) veya diğer benzer stil standartlarını kullanın.
+* Bileşenin stilini olabildiğince lokal tutmak için CSS modülleri veya CSS-in-JS kütüphaneleri kullanmayı düşünebilirsiniz.
+
+# Yorumlar
+
+* Karmaşık kod parçalarını veya önemli ayrıntıları açıklamak için yorumlar ekleyin.
+* Ancak, kodunuzun açıklamalarla aşırı doldurulmamasına dikkat edin.
+
+# Düzgün Biçimlendirme
+
+* Kodunuzu düzgün bir şekilde biçimlendirin ve tutarlı bir kod stili kullanın.
+* Otomatik biçimlendirme araçlarından yararlanabilirsiniz.
+
+# İçe Aktarmalar
+
+* İlgili bileşenler dışında kullanılmayan içe aktarmaları kaldırın.
+* İlgili bileşenlerin dışında kullanılacak bir bileşen varsa, ilgili bileşene dışa aktarın.
+
+# Biçimlendirme için Paket
+https://react-bootstrap.github.io/getting-started/introduction/
+
+# İkonlar için:
+https://icons.getbootstrap.com/
+
+# Tablolar için:
+https://tanstack.com/table/v8
+
+## Kullanılabilir Komutlar
+
+Proje dizininde, aşağıdaki komutları kullanabilirsiniz:
 
 ### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Uygulamayı geliştirme modunda çalıştırır.\
+Tarayıcınızda [http://localhost:3000](http://localhost:3000) adresini açarak uygulamayı görüntüleyebilirsiniz.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Değişiklik yaptığınızda, sayfa otomatik olarak yenilenecektir.\
+Konsolda hata mesajları ve uyarıları görebilirsiniz.
 
 ### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Etkileşimli izleme modunda test çalıştırıcısını başlatır.\
+Daha fazla bilgi için [testleri çalıştırma](https://create-react-app.dev/docs/running-tests) bölümüne göz atabilirsiniz.
 
 ### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Uygulamayı üretim için `build` klasörüne derler.\
+Bu komut, React'i üretim modunda birleştirir ve derlemeyi en iyi performans için optimize eder.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Derleme işlemi minify edilir ve dosya adlarına karma değerler eklenir.\
+Uygulamanız dağıtıma hazır hale gelir!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Daha fazla bilgi için [dağıtım](https://create-react-app.dev/docs/deployment) bölümüne göz atabilirsiniz.
 
 ### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+**Not: Bu işlem geri alınamaz. `eject` yaptıktan sonra geri dönemezsiniz!**
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Eğer yapılandırma seçeneklerinden memnun değilseniz, istediğiniz zaman `eject` komutunu kullanabilirsiniz. Bu komut, projenizden tek bir derleme bağımlılığını kaldıracaktır.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Bunun yerine, tüm yapılandırma dosyalarını ve bağımlılıkları (webpack, Babel, ESLint, vb.) projenize kopyalar. Böylece, bu dosyaların üzerinde tam kontrol sahibi olursunuz. `eject` komutu dışındaki diğer komutlar hala çalışır, ancak kopyalanan komutlar üzerinde değişiklik yapabilirsiniz. Bu noktadan itibaren tamamen sizin sorumluluğunuzdadır.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+`eject` komutunu kullanmak zorunda değilsiniz. Küçük ve orta ölçekli dağıtımlar için uygun olan özellik setiyle devam etmek isteyebilirsiniz. Ancak, ihtiyaç duyduğunuzda özelleştirmek için bu özelliği kullanabileceğinizi anlıyoruz.
 
-## Learn More
+## Daha Fazla Bilgi
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Daha fazla bilgi için [Create React App belgelerini](https://create-react-app.dev/docs/getting-started) inceleyebilirsiniz.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+React'i öğrenmek için [React belgelerine](https://tr.reactjs.org/) göz atabilirsiniz.
 
-### Code Splitting
+### Kod Parçalama (Code Splitting)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Bu bölüm [buraya](https://create-react-app.dev/docs/code-splitting) taşındı.
 
-### Analyzing the Bundle Size
+### Paket Boyutunu Analiz Etmek
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Bu bölüm [buraya](https://create-react-app.dev/docs/analyzing-the-bundle-size) taşındı.
 
-### Making a Progressive Web App
+### İlerici Web Uygulaması Oluşturma
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Bu bölüm [buraya](https://create-react-app.dev/docs/making-a-progressive-web-app) taşındı.
 
-### Advanced Configuration
+### Gelişmiş Yapılandırma
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Bu bölüm [buraya](https://create-react-app.dev/docs/advanced-configuration) taşındı.
 
-### Deployment
+### Dağıtım
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Bu bölüm [buraya](https://create-react-app.dev/docs/deployment) taşındı.
 
-### `npm run build` fails to minify
+### `npm run build` Derlemesi Başarısız Olursa
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Bu bölüm [buraya](https://create-react-app.dev/docs/troubleshooting#npm-run-build-fails-to-minify) taşındı.

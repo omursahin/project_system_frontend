@@ -1,15 +1,26 @@
-import {combineReducers, configureStore} from '@reduxjs/toolkit'
-import {setupListeners} from "@reduxjs/toolkit/query";
+import {combineReducers, configureStore} from "@reduxjs/toolkit";
+import { setupListeners } from "@reduxjs/toolkit/query";
 
+import authSlice from  "./auth/auth-slice";
 import baseApi from "./api/baseApiEndpoints";
+import notificationSlice from "./notification/notification-slice";
+// TODO RTQ Query kullanılacak
 
 const combinedReducer = combineReducers({
-    [baseApi.reducerPath]: baseApi.reducer,
+  auth: authSlice.reducer,
+  notification: notificationSlice.reducer,
+  [baseApi.reducerPath]: baseApi.reducer,
 });
-
 const store = configureStore({
-    reducer: combinedReducer,
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(baseApi.middleware),
+  reducer: (rootState, action) => {
+    let state = rootState;
+    if (authSlice.actions.logout.match(action)) {
+      const { api } = state;
+      state = { api };
+    }
+    return combinedReducer(state, action);
+  },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(baseApi.middleware),
 });
 
 setupListeners(store.dispatch);

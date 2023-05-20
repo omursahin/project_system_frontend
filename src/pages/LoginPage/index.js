@@ -1,51 +1,48 @@
-import {Alert, Button, Form} from "react-bootstrap";
-import {useState} from "react";
-import {LOGIN_URL} from "../../helpers/urls";
+import {Button, Form} from "react-bootstrap";
+import {useEffect, useState} from "react";
 import {useLoginMutation} from "../../store/api/auth";
+import {useNavigate} from "react-router-dom";
+import {useDispatch} from "react-redux";
+import {notificationActions} from "../../store/notification/notification-slice";
 
 export const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState(null);
-    debugger;
-    const [login] = useLoginMutation();
-    console.log(login)
+    const [login, {isLoading}] = useLoginMutation();
+
+    const nav = useNavigate();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(notificationActions.showLoading(isLoading));
+    }, [dispatch, isLoading]);
+
+
     const sendRequest = async (e) => {
         e.preventDefault();
-        debugger;
-        await login({
+        const response = await login({
             email,
             password
-        })
-        // const response = await fetch(LOGIN_URL, {
-        //     method: "POST",
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify({
-        //         email,
-        //         password
-        //     })
-        // })
-        // if (response.status === 200) {
-        //     const payload = await response.json();
-        //     console.log("Login başarılı");
-        //     localStorage.setItem("token", payload.access);
-        //     setError(null);
-        // } else {
-        //     console.log("Login başarısız");
-        //     setError(response.statusText);
-        // }
+        });
+
+        if (response.error) {
+            dispatch(notificationActions.showMessage({
+                header: "Hata",
+                message: response.error.data.detail,
+                variant: "danger"
+            }));
+        } else {
+            dispatch(notificationActions.showMessage({
+                header: "Giriş",
+                message: "Başarı ile giriş yapıldı...",
+                variant: "success"
+            }));
+            nav("/");
+        }
     }
 
     return (
         <>
-            {
-                error && (<Alert variant="danger">
-                    {error}
-                </Alert>)
-            }
-
             <Form>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>Email address</Form.Label>

@@ -3,45 +3,66 @@ import ReactDOM from 'react-dom/client';
 import './assests/css/index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {createBrowserRouter, RouterProvider} from "react-router-dom";
+import {createBrowserRouter, Outlet, RouterProvider} from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Alert, ThemeProvider} from "react-bootstrap";
+import {Container, Spinner, ThemeProvider} from "react-bootstrap";
 import {LoginPage} from "./pages/LoginPage";
 import {Provider} from "react-redux";
 import store from "./store";
+import {ToastMessage} from "./components/general/Toast";
+import {Loading} from "./components/general/Loading";
+import {HomePage} from "./pages/HomePage";
+import {Header} from "./components/general/Header";
+import {SemestersPage} from "./pages/SemestersPage";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+const HeaderWrapper = () => {
+    return (
+        <div>
+            <Header/>
+            <Outlet/>
+        </div>
+    )
+};
 
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <div>
-            <Alert variant="danger">
-                This is a danger alert—check it out!
-            </Alert>
-        </div>,
-    },
-    {
-        path: "/app",
-        element: <App />
-    },
-    {
-        path: "/login",
-        element: <LoginPage/>
-    }
-]);
+        element: <HeaderWrapper/>,
+        children: [
+            {
+                path: "/",
+                element: <HomePage/>,
+            },
+            {
+                path: "/login",
+                element: <LoginPage/>
+            },
+            {
+                path: "/semesters",
+                element: <SemestersPage/>
+            },
+        ]
+    }]);
 
 root.render(
-  <React.StrictMode>
-      <Provider store={store}>
-              <ThemeProvider
-                  breakpoints={['xxxl', 'xxl', 'xl', 'lg', 'md', 'sm', 'xs', 'xxs']}
-                  minBreakpoint="xxs"
-              >
-                 <RouterProvider router={router} />
-              </ThemeProvider>
-          </Provider>
-  </React.StrictMode>
+    <Provider store={store}>
+        <React.StrictMode>
+            <ThemeProvider
+                breakpoints={['xxxl', 'xxl', 'xl', 'lg', 'md', 'sm', 'xs', 'xxs']}
+                minBreakpoint="xxs"
+            >
+                <Container>
+                    <Loading/>
+                    <ToastMessage/>
+                    <RouterProvider router={router} fallbackElement={<Spinner animation="border" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                    </Spinner>}/>
+                </Container>
+            </ThemeProvider>
+        </React.StrictMode>
+    </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function
