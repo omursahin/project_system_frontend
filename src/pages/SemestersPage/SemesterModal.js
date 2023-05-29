@@ -60,10 +60,10 @@ function SemesterModal({ isEdit = false, data = {} }) {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
-                        Close
+                        Kapat
                     </Button>
                     <Button variant="primary" onClick={save}>
-                        Save Changes
+                        {isEdit ? "Güncelle" : "Ekle"}
                     </Button>
                 </Modal.Footer>
             </Modal>
