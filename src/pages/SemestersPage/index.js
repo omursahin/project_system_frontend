@@ -17,9 +17,6 @@ export const SemestersPage = () => {
     alert('Handle Delete: ' + id);
   };
 
-  const [showDeleteConfirmModal, setShowDeleteConfirmModal] = useState(false);
-
-
   return (
     <>
       <div>
@@ -27,9 +24,7 @@ export const SemestersPage = () => {
           <Table
             tableTitle="Dönem Listesi"
             searchable={true}
-            addNewEntry={
-              <SemesterModal />
-            }
+            addNewEntry={<SemesterModal />}
             head={[
               { name: 'ID', sortable: 'numeric', width: 1 },
               { name: 'Dönem', sortable: 'alpha' },
@@ -46,16 +41,13 @@ export const SemestersPage = () => {
                   title="Dönem Silme"
                   body="Bu dönemi silmek istediğinizden emin misiniz?"
                   onConfirm={() => handleDelete(semester.id)}
-                  show={showDeleteConfirmModal}
-                  setShow={setShowDeleteConfirmModal}
+                  btn={
+                    <>
+                      <TrashFill size={15} />
+                      <span className="d-none d-md-block">Sil</span>
+                    </>
+                  }
                 />
-                <Button
-                  variant="danger"
-                  onClick={() => setShowDeleteConfirmModal(true)}
-                >
-                  <TrashFill size={15} />
-                  <span className="d-none d-md-block">Sil</span>
-                </Button>
               </>,
             ])}
           />
