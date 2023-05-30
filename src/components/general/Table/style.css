@@ -1,0 +1,21 @@
+td {
+    vertical-align: middle;
+  }
+  .head-item {
+    display: flex;
+    align-items: center;
+  }
+  
+  .table-search {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .table-search button {
+    position: absolute !important;
+    display: block;
+    outline: none;
+    border: none;
+    right: 1px;
+  }
+  
