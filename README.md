@@ -42,6 +42,45 @@
 * İlgili bileşenler dışında kullanılmayan içe aktarmaları kaldırın.
 * İlgili bileşenlerin dışında kullanılacak bir bileşen varsa, ilgili bileşene dışa aktarın.
 
+# Bileşenler
+
+## \<Table /> Bileşeni
+
+Parameter | Type | Required | Description
+-- | -- | -- | --
+`tableTitle` | `String` | `true` | Tablo başlığı.
+`searchable` | `Boolean` | `false` | Tabloda arama özelliği isteniyorsa `true` verilmeli.
+`addNewEntry` | `React.JSX.Element` | `false` | Eleman ekleme & eleman düzenleme fonksiyonları içeren bir bileşen. (örn: `SemesterModal`)
+`head` | <pre>{  <br>  name: string, // required <br>  sortable: 'numeric' \| 'alpha' \| null,  <br>  width: integer \| null  <br>}[]</pre> | `true` |  Bu arrayde kaç tane eleman varsa o kadar sütun oluşacaktır. Sütun ismi zorunlu, sütun sıralaması ve sütun genişliği opsiyoneldir. Sütun sıralaması `numeric` olduğunda sayısal sıralama ikonunu gözükür `alpha`da ise karaktersel sıralama ikonu gözükecektir.
+`body` | <pre>[<br>  ['1.1', '1.2', ... ,  '1.n'],<br>  ['2.1', '2.2', ... ,  '2.n'],<br>  ... <br>  ['m.1', 'm.2', ... , 'm.n'],<br>]</pre> | `true` |  Tablonun elemanlarını içeren 2D bir arraydir. Gelen verinin, `Array.map()` gibi bir fonksiyon yardımıyla bu formata uygun hale getirilmesi gerekir.
+
+Tablo başlığı, tableTitle propundan alınır ve tablo başlık sütunları head propundan alınan dizideki değerlerden oluşturulur. Her başlık sütunu için sıralama işlevselliği sağlanır.
+
+Tablo gövdesi, body propundan alınan diziyi kullanarak oluşturulur. Her bir dizi öğesi, tablodaki bir satırı temsil eder ve hücrelerin içeriğini içeren alt bir diziye sahiptir.
+
+Arama işlevselliği, searchable propunun true olarak ayarlanmasıyla etkinleştirilir. Arama kutusu, kullanıcının tabloda arama yapmasına izin verir ve tabloyu filtreler. Arama işlemi, tablonun her bir hücresindeki içeriği küçük/kapital harf duyarlı olmayan bir şekilde kontrol eder. Ayrıca, tablonun altında, tabloda görüntülenecek veri bulunamadığında veya bir arama yapıldığında görüntülenecek uyarıları içeren bir Alert bileşeni bulunur. Bu şekilde, Table bileşeni, sağlanan verilere dayalı olarak bir tablo oluşturur ve arama ve sıralama işlevselliği sağlar.
+
+
+## \<SemesterModal /> Bileşeni
+
+Key | Type | Required | Description
+-- | -- | -- | --
+`isEdit` | `Boolean` | `false` | Düzenlemeyle ilgili içerikleri göstermek için `true` verilmeli.
+`data` | `Object` | `false` | `isEdit = true` geçildiyse, formdaki default değerlerin atanması ve güncelleme işlemi için bu objenin de verilmesi gereklidir.
+
+## \<ConfirmModal /> Bileşeni
+
+Key | Type | Required | Description
+-- | -- | -- | --
+`variant` | `bootstrap.types.ButtonVariant` | `false` | Onay penceresi butonunun varyantı.
+`btn` | `React.JSX.Element` | `True` | Onay penceresi butonunun içeriği.
+`title` | `String` | `False` | Pencere başlığı.
+`body` | `String` | `False` | Pencere açıklaması.
+`closeText` | `String` | `False` | Pencere iptal metni.
+`confirmText` | `String` | `False` |  Pencere onay metni.
+`onClose` | `Function` | `False` |  Pencere iptali sonrası çağrılacak fonksiyon.
+`onConfirm` | `Function` | `False` |  Pencere onayı sonrası çağrılacak fonksiyon.
+
 # Biçimlendirme için Paket
 https://react-bootstrap.github.io/getting-started/introduction/
 
