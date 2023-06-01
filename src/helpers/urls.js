@@ -3,3 +3,4 @@ export const LOGIN_PATH = '/account/token/';
 export const USER_PATH = '/users/me/';
 export const SEMESTERS_PATH = '/semesters/';
 export const COURSES_PATH = '/courses/';
+export const SEMESTER_COURSES_PATH = '/semester_courses/';

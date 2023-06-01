@@ -8,5 +8,7 @@ export const HomePage = () => {
         <Link to={"/semesters"}>Semesters</Link>
         <br/>
         <Link to={"/courses"}>Courses</Link>
+        <br/>
+        <Link to={"/semester_courses"}>Semester Courses</Link>
     </>
 }

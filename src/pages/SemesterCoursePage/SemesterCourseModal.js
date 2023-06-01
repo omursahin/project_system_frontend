@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import { PlusSquareDotted, PencilFill } from 'react-bootstrap-icons';
 
-function SemesterCoursePage({ isEdit = false, data = {} }) {
+function SemesterCourseModal({ isEdit = false, data = {} }) {
 
     const [show, setShow] = useState(false);
 
@@ -88,4 +88,4 @@ function SemesterCoursePage({ isEdit = false, data = {} }) {
     );
 }
 
-export default SemesterCoursePage;
+export default SemesterCourseModal;

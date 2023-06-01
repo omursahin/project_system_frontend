@@ -15,7 +15,7 @@ const baseApi = createApi({
     },
   }),
   endpoints: () => ({}),
-  tagTypes: ["Me", "Semesters"],
+  tagTypes: ["Me", "Semesters", "SemesterCourses"],
 });
 
 export default baseApi;

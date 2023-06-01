@@ -2,45 +2,45 @@ import React, { useEffect, useState } from 'react';
 import Table from '../../components/general/Table';
 import { Button } from 'react-bootstrap';
 import { TrashFill } from 'react-bootstrap-icons';
-import SemesterCoursePage from './SemesterCoursePage';
 import ConfirmModal from '../../components/general/Modal/ConfirmModal';
 import {notificationActions} from "../../store/notification/notification-slice";
 import {useDispatch} from "react-redux";
-import {useGetAllCoursesQuery} from "../../store/api/courses";
+import {useGetAllSemesterCoursesQuery} from "../../store/api/semester_courses";
+import SemesterCourseModal from "./SemesterCourseModal";
 
 export const SemesterCoursePage = () => {
 
-  const { data: courses, isLoading } = useGetAllCoursesQuery();
+  const { data, isLoading } = useGetAllSemesterCoursesQuery();
 
   const handleDelete = async (id) => {
       alert(id);
   };
 
-  console.log(courses);
+  console.log(data);
   return (
     <>
       <div>
-        {courses?.results && !isLoading ? (
+        {data?.results && !isLoading ? (
           <Table
-            tableTitle="Ders Listesi"
+            tableTitle="Dönem Dersi Listesi"
             searchable={true}
-            addNewEntry={<SemesterCoursePage />}
+            addNewEntry={<SemesterCourseModal />}
             head={[
               { name: 'ID', sortable: 'numeric', width: 1 },
               { name: 'Dönem', sortable: 'alpha' },
               { name: 'Yıl', sortable: 'numeric' },
               { name: 'Eylem', width: 1 },
             ]}
-            body={courses.results.map((course) => [
-              course.id,
-              ['Güz', 'Bahar', 'Yaz'][course.term],
-              `${course.year} - ${course.year + 1}`,
+            body={data.results.map((semester_course) => [
+                semester_course.id,
+              ['Güz', 'Bahar', 'Yaz'][semester_course.term],
+              `${semester_course.year} - ${semester_course.year + 1}`,
               <>
-                <SemesterCoursePage isEdit={true} data={course} />
+                <SemesterCourseModal isEdit={true} data={semester_course} />
                 <ConfirmModal
-                  title="Dönem Silme"
-                  body="Bu dönemi silmek istediğinizden emin misiniz?"
-                  onConfirm={() => handleDelete(course.id)}
+                  title="Dönem Dersi Silme"
+                  body="Bu dönem dersini silmek istediğinizden emin misiniz?"
+                  onConfirm={() => handleDelete(semester_course.id)}
                   btn={
                     <>
                       <TrashFill size={15} />

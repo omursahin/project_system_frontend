@@ -15,6 +15,7 @@ import {HomePage} from "./pages/HomePage";
 import {Header} from "./components/general/Header";
 import {SemestersPage} from "./pages/SemestersPage";
 import {CoursesPage} from "./pages/CoursesPage";
+import {SemesterCoursePage} from "./pages/SemesterCoursePage";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
             {
                 path: "/courses",
                 element: <CoursesPage/>
+            },
+            {
+                path: "/semester_courses",
+                element: <SemesterCoursePage/>
             },
         ]
     }]);
