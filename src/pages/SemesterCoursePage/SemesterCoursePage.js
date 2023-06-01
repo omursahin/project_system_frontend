@@ -3,18 +3,8 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import { PlusSquareDotted, PencilFill } from 'react-bootstrap-icons';
-import {useSemesterCreateMutation, useSemesterUpdateMutation} from "../../store/api/semesters";
-import {notificationActions} from "../../store/notification/notification-slice";
-import {useDispatch} from "react-redux";
 
-function SemesterModal({ isEdit = false, data = {} }) {
-    const [term, setTerm] = useState(data?.term);
-    const [year, setYear] = useState(data?.year);
-    const dispatch = useDispatch();
-
-    const [update] = useSemesterUpdateMutation();
-    const [create] = useSemesterCreateMutation();
-
+function SemesterCoursePage({ isEdit = false, data = {} }) {
 
     const [show, setShow] = useState(false);
 
@@ -24,33 +14,27 @@ function SemesterModal({ isEdit = false, data = {} }) {
     const save = async () => {
         let response = null;
         if (data?.id) {
-            const payload = {
-                id: data.id,
-                term,
-                year
-            };
-            response = await update(payload);
+            // Güncelleme
+            alert("Güncelleme")
+
         } else {
-            const payload = {
-                term,
-                year
-            };
-            response = await create(payload);
+            // Yeni veri ekleme
+            alert("Yeni veri ekleme")
         }
 
-        if (response.error) {
-            dispatch(notificationActions.showMessage({
-                header: "Hata",
-                message: "Bir hata ile karşılaşıldı...",
-                variant: "danger"
-            }));
-        } else {
-            dispatch(notificationActions.showMessage({
-                header: "Giriş",
-                message: "Başarı ile eklendi/güncellendi",
-                variant: "success"
-            }));
-        }
+        // if (response.error) {
+        //     dispatch(notificationActions.showMessage({
+        //         header: "Hata",
+        //         message: "Bir hata ile karşılaşıldı...",
+        //         variant: "danger"
+        //     }));
+        // } else {
+        //     dispatch(notificationActions.showMessage({
+        //         header: "Giriş",
+        //         message: "Başarı ile eklendi/güncellendi",
+        //         variant: "success"
+        //     }));
+        // }
         setShow(false);
     };
 
@@ -61,7 +45,7 @@ function SemesterModal({ isEdit = false, data = {} }) {
                 onClick={handleShow}
             >
                 {isEdit ? <PencilFill size={15}></PencilFill> : <PlusSquareDotted size={20} />}
-                <span className="d-none d-md-block" >{isEdit ? "Düzenle" : "Dönem Ekle"}</span>
+                <span className="d-none d-md-block" >{isEdit ? "Düzenle" : "Ders Ekle"}</span>
             </Button>
 
             <Modal show={show} onHide={handleClose}>
@@ -72,7 +56,7 @@ function SemesterModal({ isEdit = false, data = {} }) {
                     <Form>
                         <Form.Group className="mb-3" controlId="term">
                             <Form.Label>Dönem</Form.Label>
-                            <Form.Select aria-label="term" value={term} onChange={(e) => setTerm(e.target.value)}>
+                            <Form.Select aria-label="term" value={data?.term} onChange={(e) => {}}>
                                 <option value={0}>Güz</option>
                                 <option value={1}>Bahar</option>
                                 <option value={2}>Yaz</option>
@@ -84,9 +68,9 @@ function SemesterModal({ isEdit = false, data = {} }) {
                         >
                             <Form.Label>Yıl</Form.Label>
                             <Form.Control
-                                onChange={(e) => setYear(e.target.value)}
+                                onChange={(e) => {}}
                                 type="number"
-                                value={year || ''}
+                                value={data?.year || ''}
                             />
                         </Form.Group>
                     </Form>
@@ -104,4 +88,4 @@ function SemesterModal({ isEdit = false, data = {} }) {
     );
 }
 
-export default SemesterModal;
+export default SemesterCoursePage;

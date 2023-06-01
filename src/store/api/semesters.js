@@ -8,8 +8,31 @@ export const authApi = baseApi.injectEndpoints({
       query: () => `${SEMESTERS_PATH}`,
         providesTags: ['Semesters']
     }),
+    semesterUpdate: builder.mutation({
+      query: (payload) => ({
+        url: `${SEMESTERS_PATH}${payload?.id}/`,
+        method: "PATCH",
+        body: payload
+      }),
+      invalidatesTags: ['Semesters']
+    }),
+    semesterCreate: builder.mutation({
+      query: (payload) => ({
+        url: `${SEMESTERS_PATH}`,
+        method: "POST",
+        body: payload
+      }),
+      invalidatesTags: ['Semesters']
+    }),
+    semesterRemove: builder.mutation({
+      query: (id) => ({
+        url: `${SEMESTERS_PATH}${id}/`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ['Semesters']
+    }),
   }),
   overrideExisting: false,
 });
 
-export const { useGetAllSemestersQuery } = authApi;
+export const { useGetAllSemestersQuery, useSemesterUpdateMutation, useSemesterCreateMutation, useSemesterRemoveMutation } = authApi;

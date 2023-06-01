@@ -1,60 +1,46 @@
 import React, { useEffect, useState } from 'react';
-import {useGetAllSemestersQuery, useSemesterCreateMutation, useSemesterRemoveMutation} from '../../store/api/semesters';
 import Table from '../../components/general/Table';
 import { Button } from 'react-bootstrap';
 import { TrashFill } from 'react-bootstrap-icons';
-import SemesterModal from './SemesterModal';
+import CourseModal from './CourseModal';
 import ConfirmModal from '../../components/general/Modal/ConfirmModal';
 import {notificationActions} from "../../store/notification/notification-slice";
 import {useDispatch} from "react-redux";
+import {useGetAllCoursesQuery} from "../../store/api/courses";
 
-export const SemestersPage = () => {
-    const dispatch = useDispatch();
+export const CoursesPage = () => {
 
-    const [remove, isSuccess] = useSemesterRemoveMutation();
-    const { data: semesters, isLoading } = useGetAllSemestersQuery();
+  const { data: courses, isLoading } = useGetAllCoursesQuery();
 
   const handleDelete = async (id) => {
-      await remove(id);
-      if (isSuccess) {
-          dispatch(notificationActions.showMessage({
-              header: "Giriş",
-              message: "Başarı ile silindi...",
-              variant: "success"
-          }));
-      } else {
-          dispatch(notificationActions.showMessage({
-              header: "Hata",
-              message: "Bir hata ile karşılaşıldı...",
-              variant: "danger"
-          }));
-      }
+      alert(id);
   };
 
+  console.log(courses);
   return (
     <>
       <div>
-        {semesters?.results && !isLoading ? (
+        {courses?.results && !isLoading ? (
           <Table
-            tableTitle="Dönem Listesi"
+            tableTitle="Ders Listesi"
             searchable={true}
-            addNewEntry={<SemesterModal />}
+            addNewEntry={<CourseModal />}
             head={[
               { name: 'ID', sortable: 'numeric', width: 1 },
               { name: 'Dönem', sortable: 'alpha' },
               { name: 'Yıl', sortable: 'numeric' },
               { name: 'Eylem', width: 1 },
             ]}
-            body={semesters.results.map((semester) => [
-              semester.id,
-              ['Güz', 'Bahar', 'Yaz'][semester.term],
-              `${semester.year} - ${semester.year + 1}`,
+            body={courses.results.map((course) => [
+              course.id,
+              ['Güz', 'Bahar', 'Yaz'][course.term],
+              `${course.year} - ${course.year + 1}`,
               <>
-                <SemesterModal isEdit={true} data={semester} />
+                <CourseModal isEdit={true} data={course} />
                 <ConfirmModal
                   title="Dönem Silme"
                   body="Bu dönemi silmek istediğinizden emin misiniz?"
-                  onConfirm={() => handleDelete(semester.id)}
+                  onConfirm={() => handleDelete(course.id)}
                   btn={
                     <>
                       <TrashFill size={15} />

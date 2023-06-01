@@ -4,7 +4,6 @@ import { setupListeners } from "@reduxjs/toolkit/query";
 import authSlice from  "./auth/auth-slice";
 import baseApi from "./api/baseApiEndpoints";
 import notificationSlice from "./notification/notification-slice";
-// TODO RTQ Query kullanılacak
 
 const combinedReducer = combineReducers({
   auth: authSlice.reducer,
