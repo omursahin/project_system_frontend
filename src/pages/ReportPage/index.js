@@ -6,55 +6,81 @@ import ConfirmModal from '../../components/general/Modal/ConfirmModal';
 import {notificationActions} from "../../store/notification/notification-slice";
 import {useDispatch} from "react-redux";
 import ReportModal from "./ReportModal";
-import {useGetAllReportsQuery} from "../../store/api/reports";
+import {useGetAllReportsQuery,useReportRemoveMutation} from "../../store/api/reports";
 
 export const ReportPage = () => {
+  const dispatch = useDispatch();
 
-  const { data, isLoading } = useGetAllReportsQuery();
-
+  const [remove, isSuccess] = useReportRemoveMutation();
+  const { data: reports, isLoading } = useGetAllReportsQuery();
+  useEffect(() => {
+   console.log(reports)
+}, []);
+  
   const handleDelete = async (id) => {
-      alert(id);
-  };
+    await remove(id);
+    if (isSuccess) {
+        dispatch(notificationActions.showMessage({
+            header: "Giriş",
+            message: "Başarı ile silindi...",
+            variant: "success"
+        }));
+    } else {
+        dispatch(notificationActions.showMessage({
+            header: "Hata",
+            message: "Bir hata ile karşılaşıldı...",
+            variant: "danger"
+        }));
+    }
+};
 
-  console.log(data);
   return (
     <>
-      <div>
-        {data?.results && !isLoading ? (
-          <Table
-            tableTitle="Rapor Listesi"
-            searchable={true}
-            addNewEntry={<ReportModal />}
-            head={[
-              { name: 'ID', sortable: 'numeric', width: 1 },
-              { name: 'Dönem', sortable: 'alpha' },
-              { name: 'Yıl', sortable: 'numeric' },
-              { name: 'Eylem', width: 1 },
-            ]}
-            body={data.results.map((semester_course) => [
-                semester_course.id,
-              ['Güz', 'Bahar', 'Yaz'][semester_course.term],
-              `${semester_course.year} - ${semester_course.year + 1}`,
-              <>
-                <ReportModal isEdit={true} data={semester_course} />
-                <ConfirmModal
-                  title="Rapor Silme"
-                  body="Bu raporu silmek istediğinizden emin misiniz?"
-                  onConfirm={() => handleDelete(semester_course.id)}
-                  btn={
-                    <>
-                      <TrashFill size={15} />
-                      <span className="d-none d-md-block">Sil</span>
-                    </>
-                  }
-                />
-              </>,
-            ])}
-          />
-        ) : (
-          'Loading...'
-        )}
-      </div>
-    </>
+    <div>
+      {reports?.results && !isLoading ? (
+        <Table
+          tableTitle="Rapor Listesi"
+          searchable={true}
+          addNewEntry={<ReportModal />}
+          head={[
+            { name: 'ID', sortable: 'numeric', width: 1 },
+            { name: 'Dönem', sortable: 'alpha' },
+            { name: 'Başlık', sortable: 'alpha' },
+            { name: 'Açıklama' },
+            { name: 'Genel', sortable: 'alpha' },
+            { name: 'Final', sortable: 'alpha' },
+            { name: 'Eylem', width: 1 },
+          ]}
+          body={reports.results.map((report) => [
+            report.id,
+            `${report.semester_course.semester.year} 
+            - ${report.semester_course.semester.year + 1} /
+            ${report.semester_course.course.title}
+            `,
+            report.title,
+            report.description,
+            report.is_public ? 'X' : '',
+            report.is_final ? 'X' : '',
+            <>
+              <ReportModal isEdit={true} data={report} />
+              <ConfirmModal
+                title="Rapor Silme"
+                body="Bu raporu silmek istediğinizden emin misiniz?"
+                onConfirm={() => handleDelete(report.id)}
+                btn={
+                  <>
+                    <TrashFill size={15} />
+                    <span className="d-none d-md-block">Sil</span>
+                  </>
+                }
+              />
+            </>,
+          ])}
+        />
+      ) : (
+        'Yükleniyor...'
+      )}
+    </div>
+  </>
   );
 };

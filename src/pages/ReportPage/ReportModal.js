@@ -1,91 +1,144 @@
-import React, { useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import Modal from 'react-bootstrap/Modal';
-import { PlusSquareDotted, PencilFill } from 'react-bootstrap-icons';
+    import React, { useState,useEffect } from 'react';
+    import Button from 'react-bootstrap/Button';
+    import Form from 'react-bootstrap/Form';
+    import Modal from 'react-bootstrap/Modal';
+    import { PlusSquareDotted, PencilFill } from 'react-bootstrap-icons';
+    import { useReportCreateMutation, useReportUpdateMutation } from "../../store/api/reports";
+    import { notificationActions } from "../../store/notification/notification-slice";
+    import { useDispatch } from "react-redux";
 
-function ReportModal({ isEdit = false, data = {} }) {
+    function ReportModal({ isEdit = false, data = {} }) {
+        const [title, setTitle] = useState(data?.title);
+        const [description, setDescription] = useState(data?.description );
+        const [isFinal, setisFinal] = useState(data?.isFinal);
+        const [isPublic, setisPublic] = useState(data?.isPublic);
+        const dispatch = useDispatch();
 
-    const [show, setShow] = useState(false);
+        const [update] = useReportUpdateMutation();
+        const [create] = useReportCreateMutation();
 
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+        const [show, setShow] = useState(false);
+        useEffect(() => {
+            console.log(data)
+         }, []);
+           
+        const handleClose = () => setShow(false);
+        const handleShow = () => setShow(true);
 
-    const save = async () => {
-        let response = null;
-        if (data?.id) {
-            // Güncelleme
-            alert("Güncelleme")
+        const save = async () => {
+            let response = null;
+            if (data?.id) {
+                const payload = {
+                    id: data.id,
+                    title,
+                    description,
+                    isFinal,
+                    isPublic
+                };
+                console.log(payload)
+             
+                
+                response = await update(payload);
+            } else {
+                const payload = {
+                    title,
+                    description,
+                    isFinal,
+                    isPublic
+                };
+                response = await create(payload);
+            }
 
-        } else {
-            // Yeni veri ekleme
-            alert("Yeni veri ekleme")
-        }
+            if (response.error) {
+                dispatch(notificationActions.showMessage({
+                    header: "Hata",
+                    message: "Bir hata ile karşılaşıldı...",
+                    variant: "danger"
+                }));
+            } else {
+                dispatch(notificationActions.showMessage({
+                    header: "Giriş",
+                    message: "Başarı ile eklendi/güncellendi",
+                    variant: "success"
+                }));
+            }
+            setShow(false);
+        };
 
-        // if (response.error) {
-        //     dispatch(notificationActions.showMessage({
-        //         header: "Hata",
-        //         message: "Bir hata ile karşılaşıldı...",
-        //         variant: "danger"
-        //     }));
-        // } else {
-        //     dispatch(notificationActions.showMessage({
-        //         header: "Giriş",
-        //         message: "Başarı ile eklendi/güncellendi",
-        //         variant: "success"
-        //     }));
-        // }
-        setShow(false);
-    };
+        return (
+            <>
+                <Button
+                    variant={isEdit ? "outline-primary" : "primary"}
+                    onClick={handleShow}
+                >
+                    {isEdit ? <PencilFill size={15}></PencilFill> : <PlusSquareDotted size={20} />}
+                    <span className="d-none d-md-block" >{isEdit ? "Düzenle" : "Rapor Ekle"}</span>
+                </Button>
 
-    return (
-        <>
-            <Button
-                variant={isEdit ? "outline-primary" : "primary"}
-                onClick={handleShow}
-            >
-                {isEdit ? <PencilFill size={15}></PencilFill> : <PlusSquareDotted size={20} />}
-                <span className="d-none d-md-block" >{isEdit ? "Düzenle" : "Rapor Ekle"}</span>
-            </Button>
+                <Modal show={show} onHide={handleClose}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Dönem {isEdit ? "Güncelle" : "Ekle"}</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Form>
+                            
+                            <Form.Group
+                                className="mb-3"
+                                controlId="title"
+                            >
+                                <Form.Label>Başlık</Form.Label>
+                                <Form.Control
+                                    onChange={(e) => setTitle(e.target.value)}
+                                    type="text"
+                                    value={title || ''}
+                                />
+                            </Form.Group>
+                            <Form.Group
+                                className="mb-3"
+                                controlId="description"
+                            >
+                                <Form.Label>Açıklama</Form.Label>
+                                <Form.Control
+                                   onChange={(e) => setDescription(e.target.value)}
+                                    type="text"
+                                    defaultValue={description || ''}
+                                />
+                            </Form.Group>
+                            <Form.Group className="mb-3" controlId="isFinal">
+  <Form.Check
+    type="checkbox"
+    label="Final"
+    checked={isFinal || false}
+    onChange={(e) => setisFinal(e.target.checked)}
+    defaultChecked={isFinal || false}
+    
+  />
+</Form.Group>
 
-            <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Dönem {isEdit ? "Güncelle" : "Ekle"}</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <Form.Group className="mb-3" controlId="term">
-                            <Form.Label>Dönem</Form.Label>
-                            <Form.Select aria-label="term" value={data?.term} onChange={(e) => {}}>
-                                <option value={0}>Güz</option>
-                                <option value={1}>Bahar</option>
-                                <option value={2}>Yaz</option>
-                            </Form.Select>
-                        </Form.Group>
-                        <Form.Group
-                            className="mb-3"
-                            controlId="year"
-                        >
-                            <Form.Label>Yıl</Form.Label>
-                            <Form.Control
-                                onChange={(e) => {}}
-                                type="number"
-                                value={data?.year || ''}
-                            />
-                        </Form.Group>
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
-                        Kapat
-                    </Button>
-                    <Button variant="primary" onClick={save}>
-                        {isEdit ? "Güncelle" : "Ekle"}
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-        </>
-    );
-}
+<Form.Group className="mb-3" controlId="isPublic">
+  <Form.Check
+    type="checkbox"
+    label="Genel"
+    checked={isPublic || false}
+    onChange={(e) => setisPublic(e.target.checked)}
+    defaultChecked={isPublic || false}
 
-export default ReportModal;
+  />
+</Form.Group>
+
+                        </Form>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleClose}>
+                            Kapat
+                        </Button>
+                        <Button variant="primary" onClick={save}>
+                            {isEdit ? "Güncelle" : "Ekle"}
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+            </>
+        );
+    }
+
+    export default ReportModal;
