@@ -4,15 +4,19 @@ import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import { PlusSquareDotted, PencilFill } from 'react-bootstrap-icons';
 import { useReportCreateMutation, useReportUpdateMutation } from "../../store/api/reports";
+import { useGetAllSemesterCoursesQuery } from "../../store/api/semester_courses";
+
 import { notificationActions } from "../../store/notification/notification-slice";
 import { useDispatch } from "react-redux";
 
-function ReportModal({ isEdit = false, data = {} }) {
-    const [title, setTitle] = useState(data?.title);
-    const [description, setDescription] = useState(data?.description);
-    const [is_final, setisFinal] = useState(data?.is_final);
-    const [is_public, setisPublic] = useState(data?.is_public);
+function ReportModal({ isEdit = false, reportData = {} }) {
+    const [title, setTitle] = useState(reportData?.title);
+    const [description, setDescription] = useState(reportData?.description);
+    const [is_final, setisFinal] = useState(reportData?.is_final);
+    const [is_public, setisPublic] = useState(reportData?.is_public);
+    const [semester_course, setSemesterCourse] = useState(reportData?.semester_course);
     const dispatch = useDispatch();
+    const { data, isLoading } = useGetAllSemesterCoursesQuery();
 
     const [update] = useReportUpdateMutation();
     const [create] = useReportCreateMutation();
@@ -25,15 +29,15 @@ function ReportModal({ isEdit = false, data = {} }) {
 
     const save = async () => {
         let response = null;
-        if (data?.id) {
+        if (reportData?.id) {
             const payload = {
-                id: data.id,
+                id: reportData.id,
                 title,
                 description,
                 is_final,
-                is_public
+                is_public,
+                semester_course
             };
-            console.log(payload)
 
             response = await update(payload);
         } else {
@@ -41,7 +45,8 @@ function ReportModal({ isEdit = false, data = {} }) {
                 title,
                 description,
                 is_final,
-                is_public
+                is_public,
+                semester_course
             };
             response = await create(payload);
         }
@@ -78,6 +83,17 @@ function ReportModal({ isEdit = false, data = {} }) {
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
+                        <Form.Group className="mb-3" controlId="term">
+                            <Form.Label>Dönem</Form.Label>
+                            <Form.Select aria-label="term" value={semester_course} onChange={(e) => setSemesterCourse(e.target.value)}>
+                                {data?.results.map((data2, index) => (
+                                    <option value={data2.id}>{data2.semester.year}
+                                        - {data2.semester.year + 1} /
+                                        {data2.course.title}
+                                    </option>
+                                ))}
+                            </Form.Select>
+                        </Form.Group>
 
                         <Form.Group
                             className="mb-3"
