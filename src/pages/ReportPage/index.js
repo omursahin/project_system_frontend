@@ -12,9 +12,7 @@ export const ReportPage = () => {
 
   const [remove, isSuccess] = useReportRemoveMutation();
   const { data: reports, isLoading } = useGetAllReportsQuery();
-  useEffect(() => {
-    console.log(reports)
-  }, []);
+  
 
   const handleDelete = async (id) => {
     await remove(id);
@@ -43,11 +41,11 @@ export const ReportPage = () => {
             addNewEntry={<ReportModal />}
             head={[
               { name: 'ID', sortable: 'numeric', width: 1 },
-              { name: 'Dönem', sortable: 'alpha' },
-              { name: 'Başlık', sortable: 'alpha' },
-              { name: 'Açıklama' },
-              { name: 'Genel', sortable: 'alpha' },
-              { name: 'Final', sortable: 'alpha' },
+              { name: 'SemesterCourse', sortable: 'alpha' },
+              { name: 'Title', sortable: 'alpha' },
+              { name: 'Description' },
+              { name: 'is_public', sortable: 'alpha' },
+              { name: 'is_final', sortable: 'alpha' },
               { name: 'Eylem', width: 1 },
             ]}
             body={reports.results.map((report) => [
