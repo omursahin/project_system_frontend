@@ -18,8 +18,9 @@ function ReportModal({ isEdit = false, reportData = {} }) {
   const [is_final, setisFinal] = useState(reportData?.is_final);
   const [is_public, setisPublic] = useState(reportData?.is_public);
   const [semester_course, setSemesterCourse] = useState(
-    reportData?.semester_course
+    reportData?.semester_course?.id
   );
+
   const dispatch = useDispatch();
   const { data, isLoading } = useGetAllSemesterCoursesQuery();
 
@@ -42,7 +43,6 @@ function ReportModal({ isEdit = false, reportData = {} }) {
         is_public,
         semester_course,
       };
-
       response = await update(payload);
     } else {
       const payload = {
@@ -53,7 +53,6 @@ function ReportModal({ isEdit = false, reportData = {} }) {
         semester_course,
       };
       response = await create(payload);
-      console.log("saa", response);
     }
 
     if (response.error) {
@@ -99,13 +98,14 @@ function ReportModal({ isEdit = false, reportData = {} }) {
         <Modal.Body>
           <Form>
             <Form.Group className="mb-3" controlId="semester_course">
-              <Form.Label>Dönem</Form.Label>
+              <Form.Label>SemesterCourse</Form.Label>
               <Form.Select
                 aria-label="semester_course"
-                value={semester_course}
+                defaultValue={semester_course && semester_course}
                 onChange={(e) => setSemesterCourse(e.target.value)}
               >
-                {!isLoading ? (
+              
+              {!isLoading ? (
                   <>
                     <option value="">Lütfen Değer seçiniz</option>
                     {data?.results.map((item, index) => (
@@ -116,6 +116,7 @@ function ReportModal({ isEdit = false, reportData = {} }) {
                     ))}
                   </>
                 ) : null}
+                
               </Form.Select>
             </Form.Group>
 
