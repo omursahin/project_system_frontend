@@ -6,7 +6,7 @@ export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllReports: builder.query({
       query: () => `${REPORTS_PATH}`,
-        providesTags: ['Semesters']
+        providesTags: ['Reports']
     }),
     reportUpdate: builder.mutation({
       query: (payload) => ({
@@ -14,7 +14,7 @@ export const authApi = baseApi.injectEndpoints({
         method: "PATCH",
         body: payload
       }),
-      invalidatesTags: ['Semesters']
+      invalidatesTags: ['Reports']
     }),
     reportCreate: builder.mutation({
       query: (payload) => ({
@@ -22,14 +22,14 @@ export const authApi = baseApi.injectEndpoints({
         method: "POST",
         body: payload
       }),
-      invalidatesTags: ['Semesters']
+      invalidatesTags: ['Reports']
     }),
     reportRemove: builder.mutation({
       query: (id) => ({
         url: `${REPORTS_PATH}${id}/`,
         method: "DELETE",
       }),
-      invalidatesTags: ['Semesters']
+      invalidatesTags: ['Reports']
     }),
   }),
   overrideExisting: false,
