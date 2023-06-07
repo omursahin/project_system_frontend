@@ -8,7 +8,7 @@ export const authApi = baseApi.injectEndpoints({
       query: () => `${COURSES_PATH}`,
         providesTags: ['Courses']
     }),
-    coursesUpdate: builder.mutation({
+    courseUpdate: builder.mutation({
       query: (payload) => ({
         url: `${COURSES_PATH}${payload?.id}/`,
         method: "PATCH",
@@ -16,7 +16,7 @@ export const authApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['Courses']
     }),
-    coursesCreate: builder.mutation({
+    courseCreate: builder.mutation({
       query: (payload) => ({
         url: `${COURSES_PATH}`,
         method: "POST",
@@ -24,7 +24,7 @@ export const authApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['Courses']
     }),
-    coursesRemove: builder.mutation({
+    courseRemove: builder.mutation({
       query: (id) => ({
         url: `${COURSES_PATH}${id}/`,
         method: "DELETE",
@@ -35,4 +35,4 @@ export const authApi = baseApi.injectEndpoints({
   overrideExisting: false,
 });
 
-export const { useGetAllCoursesQuery, useCoursesUpdateMutation, useCoursesCreateMutation, useCoursesRemoveMutation } = authApi;
+export const { useGetAllCoursesQuery, useCourseUpdateMutation, useCourseCreateMutation, useCourseRemoveMutation } = authApi;

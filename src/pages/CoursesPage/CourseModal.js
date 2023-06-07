@@ -5,7 +5,8 @@ import Modal from 'react-bootstrap/Modal';
 import { PlusSquareDotted, PencilFill } from 'react-bootstrap-icons';
 import {useDispatch} from "react-redux";
 
-import {useCoursesCreateMutation, useCoursesUpdateMutation} from "../../store/api/courses";
+import {useCourseCreateMutation, useCourseUpdateMutation} from "../../store/api/courses";
+import {notificationActions} from "../../store/notification/notification-slice";
 
 function CourseModal({ isEdit = false, data = {} }) {
 
@@ -14,8 +15,8 @@ function CourseModal({ isEdit = false, data = {} }) {
     const [description, setDescription] = useState(data?.description);
     const dispatch = useDispatch();
 
-    const [update] = useCoursesUpdateMutation();
-    const [create] = useCoursesCreateMutation();
+    const [update] = useCourseUpdateMutation();
+    const [create] = useCourseCreateMutation();
 
     const [show, setShow] = useState(false);
 
@@ -25,29 +26,38 @@ function CourseModal({ isEdit = false, data = {} }) {
     const save = async () => {
         let response = null;
         if (data?.id) {
-            // Güncelleme
-            alert("Güncelleme")
-
+            const payload = {
+                id: data.id,
+                code,
+                title,
+                description
+            };
+            response = await update(payload);
         } else {
-            // Yeni veri ekleme
-            alert("Yeni veri ekleme")
+            const payload = {
+                code,
+                title,
+                description
+            };
+            response = await create(payload);
         }
 
-        // if (response.error) {
-        //     dispatch(notificationActions.showMessage({
-        //         header: "Hata",
-        //         message: "Bir hata ile karşılaşıldı...",
-        //         variant: "danger"
-        //     }));
-        // } else {
-        //     dispatch(notificationActions.showMessage({
-        //         header: "Giriş",
-        //         message: "Başarı ile eklendi/güncellendi",
-        //         variant: "success"
-        //     }));
-        // }
+        if (response.error) {
+            dispatch(notificationActions.showMessage({
+                header: "Hata",
+                message: "Bir hata ile karşılaşıldı...",
+                variant: "danger"
+            }));
+        } else {
+            dispatch(notificationActions.showMessage({
+                header: "Giriş",
+                message: "Başarı ile eklendi/güncellendi",
+                variant: "success"
+            }));
+        }
         setShow(false);
     };
+
 
     return (
         <>
@@ -72,9 +82,9 @@ function CourseModal({ isEdit = false, data = {} }) {
                         >
                             <Form.Label>Kod</Form.Label>
                             <Form.Control
-                                onChange={(e) => {}}
+                                onChange={(e) => setCode(e.target.value)}
                                 type="text"
-                                value={data?.code || ''}
+                                value={code || ''}
                             />
                         </Form.Group>
 
@@ -84,9 +94,9 @@ function CourseModal({ isEdit = false, data = {} }) {
                         >
                             <Form.Label>Başlık</Form.Label>
                             <Form.Control
-                                onChange={(e) => {}}
+                                onChange={(e) => setTitle(e.target.value)}
                                 type="text"
-                                value={data?.title || ''}
+                                value={title || ''}
                             />
                         </Form.Group>
 
@@ -96,9 +106,9 @@ function CourseModal({ isEdit = false, data = {} }) {
                         >
                             <Form.Label>Açıklama</Form.Label>
                             <Form.Control
-                                onChange={(e) => {}}
+                                onChange={(e) => setDescription(e.target.value)}
                                 type="text"
-                                value={data?.description || ''}
+                                value={description || ''}
                             />
                         </Form.Group>
                     </Form>
