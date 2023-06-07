@@ -9,6 +9,7 @@ import {useDispatch} from "react-redux";
 import {useGetAllCoursesQuery} from "../../store/api/courses";
 
 export const CoursesPage = () => {
+  const dispatch = useDispatch();
 
   const { data: courses, isLoading } = useGetAllCoursesQuery();
 
@@ -27,8 +28,9 @@ export const CoursesPage = () => {
             addNewEntry={<CourseModal />}
             head={[
               { name: 'ID', sortable: 'numeric', width: 1 },
-              { name: 'Dönem', sortable: 'alpha' },
-              { name: 'Yıl', sortable: 'numeric' },
+              { name: 'Kod' },
+              { name: 'Başlık' },
+              { name: 'Açıklama' },
               { name: 'Eylem', width: 1 },
             ]}
             body={courses.results.map((course) => [
