@@ -11,10 +11,17 @@ import {
 import {useDispatch} from "react-redux";
 import {notificationActions} from "../../store/notification/notification-slice";
 import {useGetAllCoursesQuery} from "../../store/api/courses";
-import useGetAllSemesters from "../../store/api/semesters";
+import useGetAllSemesters, {useGetAllSemestersQuery} from "../../store/api/semesters";
 
 
 function SemesterCourseModal({isEdit = false, SemesterCourseData = {}}) {
+
+    const {data:semesters} = useGetAllSemestersQuery();
+    console.log(semesters);
+
+    const {data:coursesAll} =useGetAllCoursesQuery();
+    console.log(coursesAll);
+
     const [year, setYear] = useState(SemesterCourseData?.year);
     const [term, setTerm] = useState(SemesterCourseData?.term?.id);
     const [courses, setCourses] = useState(SemesterCourseData?.courses?.id);
@@ -69,6 +76,18 @@ function SemesterCourseModal({isEdit = false, SemesterCourseData = {}}) {
         setShow(false);
     };
 
+    const getSemesterType = (id) => {
+        if(id === 0){
+            return "Güz";
+        } else if(id === 1) {
+            return "Bahar";
+        } else if(id === 2){
+            return "Yaz";
+        } else {
+            return "Tanımsız Dönem";
+        }
+    }
+
     return (
         <>
             <Button
@@ -85,19 +104,7 @@ function SemesterCourseModal({isEdit = false, SemesterCourseData = {}}) {
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
-                        <Form.Group
-                            className="mb-3"
-                            controlId="year"
-                        >
-                            <Form.Label>Yıl</Form.Label>
-                            <FormControl
-                                onChange={(e) => {
-                                    setYear(e.target.value)
-                                }}
-                                type="number"
-                                value={year || ''}
-                            />
-                        </Form.Group>
+
                         <Form.Group className="mb-3" controlId="term">
                             <Form.Label>Dönem</Form.Label>
                             <Form.Select aria-label="term"
@@ -105,9 +112,10 @@ function SemesterCourseModal({isEdit = false, SemesterCourseData = {}}) {
                                          onChange={(e) => {
                                              setTerm(e.target.value)
                                          }}>
-                                <option value={0}>Güz</option>
-                                <option value={1}>Bahar</option>
-                                <option value={2}>Yaz</option>
+                                {semesters?.results.map(semester =>(
+                                    <option key={semester?.id} value={semester?.term}>{semester?.year} - {semester?.year + 1} - {getSemesterType(semester?.term)}</option>
+                                ) )
+                                }
                             </Form.Select>
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="courses">

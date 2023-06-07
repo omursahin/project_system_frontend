@@ -16,7 +16,6 @@ export const SemesterCoursePage = () => {
         alert(id);
     };
 
-    console.log(data);
     return (
         <>
             <div>
