@@ -5,3 +5,4 @@ export const SEMESTERS_PATH = '/semesters/';
 export const COURSES_PATH = '/courses/';
 export const SEMESTER_COURSES_PATH = '/semester_courses/';
 export const REPORTS_PATH = '/reports/';
+export const GROUPS_PATH = '/groups/';
