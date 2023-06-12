@@ -8,17 +8,17 @@ import {notificationActions} from "../../store/notification/notification-slice";
 import {useDispatch} from "react-redux";
 import {useGetAllSemesterCoursesQuery} from "../../store/api/semester_courses";
 
-function GroupModal({ isEdit = false, groupData = {} }) {
+function GroupModal() {
     const { data, isLoading } = useGetAllSemesterCoursesQuery();
     const [create] = useGroupCreateMutation();
 
     const dispatch = useDispatch();
     const [show, setShow] = useState(false);
 
-    const [title, setTitle] = useState(groupData?.title);
-    const [description, setDescription] = useState(groupData?.description);
-    const [semester_course, setSemesterCourse] = useState(groupData?.semester_course?.id);
-    const [status, setStatus] = useState(groupData?.status);
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
+    const [semester_course, setSemesterCourse] = useState("");
+    const [status, setStatus] = useState("");
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -27,6 +27,7 @@ function GroupModal({ isEdit = false, groupData = {} }) {
             title,
             description,
             semester_course,
+            status,
         };
         const response = await create(payload);
         if (response.error) {
@@ -53,10 +54,9 @@ function GroupModal({ isEdit = false, groupData = {} }) {
         <>
             <Button
                 className="mt-1 mx-auto"
-                variant={isEdit ? "outline-primary" : "secondary"}
+                variant={"secondary"}
                 onClick={handleShow}
             >
-                {isEdit ? <PencilFill size={15}></PencilFill> : <PlusSquareDotted size={20} />}
                 <span className="d-none d-md-block" >Grup Ekle</span>
             </Button>
 
@@ -107,24 +107,14 @@ function GroupModal({ isEdit = false, groupData = {} }) {
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="status">
                             <Form.Label>SemesterCourse</Form.Label>
-                            <Form.Select
-                                aria-label="status"
-                                defaultValue={status && status}
-                                onChange={(e) => setStatus(e.target.value)}
-                            >
-
-                                {!isLoading ? (
-                                    <>
-                                        <option value="">Lütfen Değer seçiniz</option>
-
-                                        {["Approved","Draft","Rejected","Pending"].map((item, index) => (
-                                            <option key={index} value={item.id}>
-                                                {item}
-                                            </option>
-                                        ))}
-                                    </>
-                                ) : null}
+                            <Form.Select aria-label="term" value={status} onChange={(e) => setStatus(e.target.value)}>
+                                <option value={'A'}>Approved</option>
+                                <option value={'P'}>Pending</option>
+                                <option value={'D'}>Draft</option>
+                                <option value={'R'}>Rejected</option>
                             </Form.Select>
+
+
                         </Form.Group>
                     </Form>
                 </Modal.Body>
