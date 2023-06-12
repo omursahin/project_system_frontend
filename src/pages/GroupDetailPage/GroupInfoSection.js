@@ -12,17 +12,12 @@ export const GroupInfoSection = ({ group }) => {
 
   return (
     <Card>
-      <Card.Header>Grup Detayı</Card.Header>
-      <Card.Body>
-        <div className="d-flex flex-row gap-4 justify-content-between align-items-start">
-          <EditableTextInput value={group?.title} callback={(value) => {
-            save('title', value);
-          }}>
-            <h4>
-              {group?.title}
-            </h4>
-          </EditableTextInput>
-          <div className="flex-column flex-xxl-row d-flex gap-1 ">
+      <Card.Header>
+        <div className="d-flex  justify-content-between">
+          <div>
+            Grup Detayı
+          </div>
+          <div className="d-flex gap-1 ">
             <Badge className="group_info_badge" bg="primary">
               Maksimum Üye: {group?.max_size}
             </Badge>
@@ -43,6 +38,15 @@ export const GroupInfoSection = ({ group }) => {
             </Badge>
           </div>
         </div>
+      </Card.Header>
+      <Card.Body>
+        <EditableTextInput value={group?.title} callback={(value) => {
+          save('title', value);
+        }}>
+          <h4>
+            {group?.title}
+          </h4>
+        </EditableTextInput>
         <EditableTextInput value={group?.description} callback={(value) => {
           save('description', value);
         }}>
