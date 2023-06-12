@@ -1,10 +1,13 @@
 import React from 'react';
+import { Card } from 'react-bootstrap';
 
 export const GroupProjectsSection = ({ group }) => {
   return (
-    <div className="group_projects" style={{ background: 'rgba(0,0,255,.2)' }}>
-      <h5>Grup Projeleri</h5>
-      <pre>{JSON.stringify(group?.group_projects, null, 2)}</pre>
-    </div>
+    <Card className='mt-lg-0 mt-3'>
+      <Card.Header>Grup Projeleri</Card.Header>
+      <Card.Body>
+        {JSON.stringify(group?.group_projects, null, 2)}
+      </Card.Body>
+    </Card>
   );
 };
