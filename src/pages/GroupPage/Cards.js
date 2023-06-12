@@ -70,7 +70,12 @@ const Cards = ({groups}) => {
                                                 </Stack>
 
                                                 <Stack direction="vertical" gap={3}>
-                                                    <div className="text-md-center">
+                                                    <div className="text-md-center" style={{
+                                                        display:'inline-block',
+                                                        border:'1px solid #000',
+                                                        padding:'8px 12px',
+                                                        fontWeight:'bold'
+                                                    }}>
                                                         Grup:
                                                         {group.id}
                                                     </div>

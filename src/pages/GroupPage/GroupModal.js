@@ -48,7 +48,6 @@ function GroupModal() {
             );
         }
         setShow(false);
-        console.log('data',data.results)
     }
     return (
         <>
