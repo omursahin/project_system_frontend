@@ -3,9 +3,13 @@ import {Col, Container, ListGroup, Row} from "react-bootstrap";
 import GroupModal from "./GroupModal";
 import Stack from "react-bootstrap/Stack";
 import Card from "react-bootstrap/Card";
-import { AiOutlineCheckSquare,AiOutlineCloseSquare } from "react-icons/ai";
+import { AiOutlineCheckSquare,AiOutlineCloseSquare,AiOutlineClockCircle} from "react-icons/ai";
+import { FaFileAlt } from 'react-icons/fa';
+
+
 
 const Cards = ({groups}) => {
+
     return (
         <Container style={{ minHeight: '100vh' }}>
             <Row className="justify-content-center">
@@ -50,12 +54,18 @@ const Cards = ({groups}) => {
                                                 <Stack direction="vertical" gap={3}>
                                                     <div className="text-md-center">
                                                         Durum:
-                                                        {group.is_active ?
-                                                            <AiOutlineCheckSquare style={{color:'green',fontSize: "3.5em"}} />
-                                                            : <AiOutlineCloseSquare style={{color:'red',fontSize: "3.5em"}}/>}
+                                                        {group.status === 'A' ? (
+                                                            <AiOutlineCheckSquare style={{ color: 'green', fontSize: '3.5em' }} />
+                                                        ) : group.status === 'P' ? (
+                                                            <AiOutlineClockCircle style={{ color: 'orange', fontSize: '3.5em' }} />
+                                                        ) : group.status === 'R' ? (
+                                                            <AiOutlineCloseSquare style={{ color: 'red', fontSize: '3.5em' }} />
+                                                        ) : group.status === 'D' ? (
+                                                            <FaFileAlt style={{ color: 'yellow', fontSize: '3.5em' }} />
+                                                        ) : null}
                                                     </div>
                                                     <div className="text-md-center">
-                                                        Second item
+
                                                     </div>
                                                 </Stack>
                                             </Col>

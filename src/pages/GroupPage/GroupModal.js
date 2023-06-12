@@ -11,12 +11,14 @@ import {useGetAllSemesterCoursesQuery} from "../../store/api/semester_courses";
 function GroupModal({ isEdit = false, groupData = {} }) {
     const { data, isLoading } = useGetAllSemesterCoursesQuery();
     const [create] = useGroupCreateMutation();
+
     const dispatch = useDispatch();
     const [show, setShow] = useState(false);
 
     const [title, setTitle] = useState(groupData?.title);
     const [description, setDescription] = useState(groupData?.description);
     const [semester_course, setSemesterCourse] = useState(groupData?.semester_course?.id);
+    const [status, setStatus] = useState(groupData?.status);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -102,6 +104,27 @@ function GroupModal({ isEdit = false, groupData = {} }) {
                                 type="text"
                                 defaultValue={description || ""}
                             />
+                        </Form.Group>
+                        <Form.Group className="mb-3" controlId="status">
+                            <Form.Label>SemesterCourse</Form.Label>
+                            <Form.Select
+                                aria-label="status"
+                                defaultValue={status && status}
+                                onChange={(e) => setStatus(e.target.value)}
+                            >
+
+                                {!isLoading ? (
+                                    <>
+                                        <option value="">Lütfen Değer seçiniz</option>
+
+                                        {["Approved","Draft","Rejected","Pending"].map((item, index) => (
+                                            <option key={index} value={item.id}>
+                                                {item}
+                                            </option>
+                                        ))}
+                                    </>
+                                ) : null}
+                            </Form.Select>
                         </Form.Group>
                     </Form>
                 </Modal.Body>
