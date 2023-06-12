@@ -68,6 +68,16 @@ const Cards = ({groups}) => {
 
                                                     </div>
                                                 </Stack>
+
+                                                <Stack direction="vertical" gap={3}>
+                                                    <div className="text-md-center">
+                                                        Grup:
+                                                        {group.id}
+                                                    </div>
+                                                    <div className="text-md-center">
+
+                                                    </div>
+                                                </Stack>
                                             </Col>
                                         </Row>
                                     </Container>
