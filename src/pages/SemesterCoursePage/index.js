@@ -5,41 +5,59 @@ import {TrashFill} from 'react-bootstrap-icons';
 import ConfirmModal from '../../components/general/Modal/ConfirmModal';
 import {notificationActions} from "../../store/notification/notification-slice";
 import {useDispatch} from "react-redux";
-import {useGetAllSemesterCoursesQuery} from "../../store/api/semester_courses";
+import {useGetAllSemesterCoursesQuery, useSemesterCoursesRemoveMutation} from "../../store/api/semester_courses";
 import SemesterCourseModal from "./SemesterCourseModal";
 
 export const SemesterCoursePage = () => {
 
-    const {data, isLoading} = useGetAllSemesterCoursesQuery();
+    const dispatch = useDispatch();
+    const [remove, isSuccess] = useSemesterCoursesRemoveMutation();
+    const {data: semester_courses, isLoading} = useGetAllSemesterCoursesQuery();
 
     const handleDelete = async (id) => {
-        alert(id);
+        await remove(id);
+        if (isSuccess) {
+            dispatch(notificationActions.showMessage({
+                header: "Giriş",
+                message: "Başarı ile silindi...",
+                variant: "success"
+            }));
+        } else {
+            dispatch(notificationActions.showMessage({
+                header: "Hata",
+                message: "Bir hata ile karşılaşıldı...",
+                variant: "danger"
+            }));
+        }
     };
 
+
+    console.log(semester_courses);
     return (
         <>
             <div>
-                {data?.results && !isLoading ? (
+                {semester_courses?.results && !isLoading ? (
                     <Table
                         tableTitle="Dönem Dersi Listesi"
                         searchable={true}
                         addNewEntry={<SemesterCourseModal/>}
                         head={[
                             {name: 'ID', sortable: 'numeric', width: 1},
-                            {name: 'Dönem', sortable: 'numeric'},
+                            {name: 'Dönem', sortable: 'alpha'},
                             {name: 'Ders', sortable: 'alpha'},
-                            {name: 'Kontenjan', sortable: 'alpha'},
+                            {name: 'Kontenjan', sortable: 'numeric'},
                             {name: 'Eylem', width: 1},
                         ]}
-                        body={data.results.map((semester_course) => [
+                        body={semester_courses.results.map((semester_course) => [
                             semester_course.id,
-                            `${semester_course.semester.year} 
-                            - ${semester_course.semester.year + 1} /
-                             ${semester_course.term}
-                            `,
-                            semester_course.courses,
-                            semester_course.max_group_size,
 
+                            `${semester_course.semester.year}
+                - ${semester_course.semester.year + 1} / 
+                ${semester_course.semester.term}`,
+
+                            `${semester_course.course.title}`,
+
+                            semester_course.max_group_size,
 
                             <>
                                 <SemesterCourseModal isEdit={true} data={semester_course}/>

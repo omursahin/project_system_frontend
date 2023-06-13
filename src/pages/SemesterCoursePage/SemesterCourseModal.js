@@ -3,90 +3,76 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import {PlusSquareDotted, PencilFill} from 'react-bootstrap-icons';
-import {FormControl} from "react-bootstrap";
-import {
-    useReportCreateMutation,
-    useReportUpdateMutation,
-} from "../../store/api/reports";
+import {useGetAllSemestersQuery} from "../../store/api/semesters";
+import {useGetAllCoursesQuery} from "../../store/api/courses";
 import {useDispatch} from "react-redux";
 import {notificationActions} from "../../store/notification/notification-slice";
-import {useGetAllCoursesQuery} from "../../store/api/courses";
-import useGetAllSemesters, {useGetAllSemestersQuery} from "../../store/api/semesters";
+import {FormLabel} from "react-bootstrap";
+import {useSemesterCoursesCreateMutation, useSemesterCoursesUpdateMutation} from "../../store/api/semester_courses";
 
-
-function SemesterCourseModal({isEdit = false, SemesterCourseData = {}}) {
-
-    const {data:semesters} = useGetAllSemestersQuery();
-    console.log(semesters);
-
-    const {data:coursesAll} =useGetAllCoursesQuery();
-    console.log(coursesAll);
-
-    const [year, setYear] = useState(SemesterCourseData?.year);
-    const [term, setTerm] = useState(SemesterCourseData?.term?.id);
-    const [courses, setCourses] = useState(SemesterCourseData?.courses?.id);
-    const [max_group_size, setMax_group_size] = useState(SemesterCourseData?.max_group_size);
-
+function SemesterCourseModal({isEdit = false, data = {}}) {
 
     const [show, setShow] = useState(false);
+    const {data: semesters} = useGetAllSemestersQuery();
+    const {data: coursesAll} = useGetAllCoursesQuery();
 
+    const [term, setTerm] = useState(data?.term);
+    const [course, setCourse] = useState(data?.course);
+    const [max_group_size, setMaxGroupSize] = useState(data?.max_group_size);
+
+    const dispatch = useDispatch();
+
+    const [create] = useSemesterCoursesCreateMutation();
+    const [update] = useSemesterCoursesUpdateMutation();
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    const dispatch = useDispatch();
-    const [create] = useReportCreateMutation();
-    const [update] = useReportUpdateMutation();
-
-    const save = async () => {
-        let response = null;
-        if (SemesterCourseData?.id) {
-            const payload = {
-                id: SemesterCourseData.id,
-                year: year,
-                term: term,
-                courses: courses,
-                max_group_size: max_group_size,
-            };
-            response = await update(payload);
-        } else {
-            const payload = {
-                year,
-                term,
-                courses,
-                max_group_size,
-            };
-            response = await create(payload);
-        }
-
-        if (response.error) {
-            dispatch(
-                notificationActions.showMessage({
-                    header: "Hata",
-                    message: "Bir hata ile karşılaşıldı...",
-                    variant: "danger"
-                })
-            );
-        } else {
-            dispatch(notificationActions.showMessage({
-                    header: "Giriş",
-                    message: "Başarı ile eklendi/güncellendi",
-                    variant: "success"
-                })
-            );
-        }
-        setShow(false);
-    };
 
     const getSemesterType = (id) => {
-        if(id === 0){
+        if (id === 0) {
             return "Güz";
-        } else if(id === 1) {
+        } else if (id === 1) {
             return "Bahar";
-        } else if(id === 2){
+        } else if (id === 2) {
             return "Yaz";
         } else {
             return "Tanımsız Dönem";
         }
     }
+    const save = async () => {
+        let response = null;
+        if (data?.id) {
+            const payload = {
+                id: data.id,
+                term,
+                course,
+                max_group_size
+            };
+            response = await update(payload);
+        } else {
+            const payload = {
+                term,
+                course,
+                max_group_size
+            };
+            response = await create(payload);
+        }
+
+        if (response.error) {
+            dispatch(notificationActions.showMessage({
+                header: "Hata",
+                message: "Bir hata ile karşılaşıldı...",
+                variant: "danger"
+            }));
+        } else {
+            dispatch(notificationActions.showMessage({
+                header: "Giriş",
+                message: "Başarı ile eklendi/güncellendi",
+                variant: "success"
+
+            }));
+        }
+        setShow(false);
+    };
 
     return (
         <>
@@ -95,47 +81,47 @@ function SemesterCourseModal({isEdit = false, SemesterCourseData = {}}) {
                 onClick={handleShow}
             >
                 {isEdit ? <PencilFill size={15}></PencilFill> : <PlusSquareDotted size={20}/>}
-                <span className="d-none d-md-block">{isEdit ? "Düzenle" : "Dönem Dersi Ekle"}</span>
+                <span className="d-none d-md-block">{isEdit ? "Düzenle" : "Ders Ekle"}</span>
             </Button>
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Dönem Dersi {isEdit ? "Güncelle" : "Ekle"}</Modal.Title>
+                    <Modal.Title>Dönem {isEdit ? "Güncelle" : "Ekle"}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
-
                         <Form.Group className="mb-3" controlId="term">
                             <Form.Label>Dönem</Form.Label>
-                            <Form.Select aria-label="term"
-                                         value={term || ''}
+                            <Form.Select aria-label="term" value={data?.term}
                                          onChange={(e) => {
                                              setTerm(e.target.value)
                                          }}>
-                                {semesters?.results.map(semester =>(
-                                    <option key={semester?.id} value={semester?.term}>{semester?.year} - {semester?.year + 1} - {getSemesterType(semester?.term)}</option>
-                                ) )
-                                }
+                                {semesters?.results.map((semester, index) => (
+                                    <option key={index}
+                                            value={semester.id}>{semester?.year}-{semester?.year + 1} /
+                                        {getSemesterType(semester?.term)}</option>
+                                ))}
+
                             </Form.Select>
                         </Form.Group>
-                        <Form.Group className="mb-3" controlId="courses">
+                        <Form.Group className="mb-3" controlId="course">
                             <Form.Label>Ders</Form.Label>
-                            <Form.Control
-                                aria-label="courses"
-                                defaultValue={courses || ''}
-                                onChange={(e) => {
-                                    setCourses(e.target.value)
-                                }}
-                            />
+                            <Form.Select aria-label="course" value={data?.course}
+                                         onChange={(e) => {
+                                             setCourse(e.target.value)
+                                         }}>
+                                {coursesAll?.results.map((course, index) => (
+                                    <option key={index} value={course?.id}>{course?.title}</option>
+                                ))}
+                            </Form.Select>
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="max_group_size">
-                            <Form.Label>Kontenjan</Form.Label>
-                            <Form.Control
-                                onChange={(e) => {
-                                    setMax_group_size(e.target.value)
-                                }}
-                                type="number"
-                                value={max_group_size || ''}
+                            <FormLabel>Kontenjan</FormLabel>
+                            <Form.Control type="number"
+                                          value={data?.max_group_size}
+                                          onChange={(e) => {
+                                              setMaxGroupSize(e.target.value)
+                                          }}
                             />
                         </Form.Group>
                     </Form>
