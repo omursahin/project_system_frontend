@@ -10,7 +10,7 @@ import { GroupProjectsSection } from './GroupProjectsSection';
 export const GroupDetailPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { data: group, isLoading } = useGetGroupByIdQuery(id);
+  const { data: group, isLoading, refetch } = useGetGroupByIdQuery(id);
 
   if (isLoading) {
     return 'Loading...';
@@ -33,7 +33,7 @@ export const GroupDetailPage = () => {
           <Row>
             <Col lg xl={6} xxl={8}>
               <GroupInfoSection group={group} />
-              <GroupMembersSection group={group} />
+              <GroupMembersSection group={group} groupMemberRemoved={refetch} groupMemberAdded={refetch} />
             </Col>
             <Col>
               <GroupProjectsSection group={group} />

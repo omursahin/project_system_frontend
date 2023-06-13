@@ -7,7 +7,7 @@ import { notificationActions } from "../../store/notification/notification-slice
 import { useDispatch } from "react-redux";
 import { useGroupMemberCreateMutation } from '../../store/api/group_members';
 
-function GroupMemberAddModal({ groupId }) {
+function GroupMemberAddModal({ groupId, added = () => { } }) {
     // TODO: Fetch users from API
     const users = [{ name: "test", id: 1 }, { name: "test2", id: 2 }];
 
@@ -25,8 +25,8 @@ function GroupMemberAddModal({ groupId }) {
         let response = null;
 
         const payload = {
-            memberId,
-            groupId
+            member: memberId,
+            group: groupId
         };
 
         response = await create(payload);
@@ -45,6 +45,7 @@ function GroupMemberAddModal({ groupId }) {
                 variant: "success"
             }));
         }
+        added();
         setShow(false);
     };
 
@@ -68,6 +69,7 @@ function GroupMemberAddModal({ groupId }) {
                         <Form.Group className="mb-3" controlId="groupMemberId">
                             <Form.Label>Kullanıcı</Form.Label>
                             <Form.Select aria-label="groupMemberId" value={memberId} onChange={(e) => setMemberId(e.target.value)}>
+                                <option value={null}>Seçiniz</option>
                                 {users.map((user) => (
                                     <option key={user.id} value={user.id}>{user.name}</option>
                                 ))}
