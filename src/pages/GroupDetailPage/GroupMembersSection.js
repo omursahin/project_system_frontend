@@ -1,11 +1,19 @@
 import React from 'react';
 import { Badge, Card, ListGroup } from 'react-bootstrap';
 import { CheckCircleFill, XCircleFill } from 'react-bootstrap-icons';
+import GroupMemberAddModal from './GroupMemberAddModal';
 
 export const GroupMembersSection = ({ group }) => {
   return (
     <Card className='mt-3'>
-      <Card.Header>Grup Üyeleri</Card.Header>
+      <Card.Header>
+        <div className="d-flex justify-content-between align-items-center">
+          <div>Grup Üyeleri</div>
+          <div>
+            <GroupMemberAddModal groupId={group.id} />
+          </div>
+        </div>
+      </Card.Header>
       <Card.Body>
         <ListGroup as="ol" numbered className=' list-group-flush'>
           {group?.group_members?.map((member) => (
