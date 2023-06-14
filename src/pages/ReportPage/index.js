@@ -16,7 +16,6 @@ export const ReportPage = () => {
       alert(id);
   };
 
-  console.log(data);
   return (
     <>
       <div>

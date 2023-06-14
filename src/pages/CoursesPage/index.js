@@ -16,7 +16,6 @@ export const CoursesPage = () => {
       alert(id);
   };
 
-  console.log(courses);
   return (
     <>
       <div>

@@ -9,50 +9,44 @@ import {useDispatch} from "react-redux";
 import {notificationActions} from "../../store/notification/notification-slice";
 import {FormLabel} from "react-bootstrap";
 import {useSemesterCoursesCreateMutation, useSemesterCoursesUpdateMutation} from "../../store/api/semester_courses";
+import {getSemesterType} from "../../helpers/typeConverters";
 
 function SemesterCourseModal({isEdit = false, data = {}}) {
 
     const [show, setShow] = useState(false);
-    const {data: semesters} = useGetAllSemestersQuery();
+    const {data: semestersAll} = useGetAllSemestersQuery();
     const {data: coursesAll} = useGetAllCoursesQuery();
 
     const [term, setTerm] = useState(data?.term);
     const [course, setCourse] = useState(data?.course);
-    const [max_group_size, setMaxGroupSize] = useState(data?.max_group_size);
+
+    const [maxGroupSize, setMaxGroupSize] = useState(data?.max_group_size);
 
     const dispatch = useDispatch();
 
     const [create] = useSemesterCoursesCreateMutation();
     const [update] = useSemesterCoursesUpdateMutation();
+
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    const getSemesterType = (id) => {
-        if (id === 0) {
-            return "Güz";
-        } else if (id === 1) {
-            return "Bahar";
-        } else if (id === 2) {
-            return "Yaz";
-        } else {
-            return "Tanımsız Dönem";
-        }
-    }
+
     const save = async () => {
         let response = null;
         if (data?.id) {
             const payload = {
                 id: data.id,
-                term,
+                semester:term,
                 course,
-                max_group_size
+                max_group_size:maxGroupSize
             };
+
             response = await update(payload);
         } else {
             const payload = {
-                term,
+                semester:term,
                 course,
-                max_group_size
+                max_group_size:maxGroupSize
             };
             response = await create(payload);
         }
@@ -92,11 +86,11 @@ function SemesterCourseModal({isEdit = false, data = {}}) {
                     <Form>
                         <Form.Group className="mb-3" controlId="term">
                             <Form.Label>Dönem</Form.Label>
-                            <Form.Select aria-label="term" value={data?.term}
+                            <Form.Select aria-label="term" value={term}
                                          onChange={(e) => {
                                              setTerm(e.target.value)
                                          }}>
-                                {semesters?.results.map((semester, index) => (
+                                {semestersAll?.results.map((semester, index) => (
                                     <option key={index}
                                             value={semester.id}>{semester?.year}-{semester?.year + 1} /
                                         {getSemesterType(semester?.term)}</option>
@@ -106,7 +100,7 @@ function SemesterCourseModal({isEdit = false, data = {}}) {
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="course">
                             <Form.Label>Ders</Form.Label>
-                            <Form.Select aria-label="course" value={data?.course}
+                            <Form.Select aria-label="course" value={course}
                                          onChange={(e) => {
                                              setCourse(e.target.value)
                                          }}>
@@ -118,7 +112,7 @@ function SemesterCourseModal({isEdit = false, data = {}}) {
                         <Form.Group className="mb-3" controlId="max_group_size">
                             <FormLabel>Kontenjan</FormLabel>
                             <Form.Control type="number"
-                                          value={data?.max_group_size}
+                                          value={maxGroupSize}
                                           onChange={(e) => {
                                               setMaxGroupSize(e.target.value)
                                           }}

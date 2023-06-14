@@ -7,6 +7,7 @@ import {notificationActions} from "../../store/notification/notification-slice";
 import {useDispatch} from "react-redux";
 import {useGetAllSemesterCoursesQuery, useSemesterCoursesRemoveMutation} from "../../store/api/semester_courses";
 import SemesterCourseModal from "./SemesterCourseModal";
+import {getSemesterType} from "../../helpers/typeConverters";
 
 export const SemesterCoursePage = () => {
 
@@ -32,7 +33,6 @@ export const SemesterCoursePage = () => {
     };
 
 
-    console.log(semester_courses);
     return (
         <>
             <div>
@@ -53,12 +53,11 @@ export const SemesterCoursePage = () => {
 
                             `${semester_course.semester.year}
                 - ${semester_course.semester.year + 1} / 
-                ${semester_course.semester.term}`,
+                ${getSemesterType(semester_course.semester.term)}`,
 
                             `${semester_course.course.title}`,
 
                             semester_course.max_group_size,
-
                             <>
                                 <SemesterCourseModal isEdit={true} data={semester_course}/>
                                 <ConfirmModal
