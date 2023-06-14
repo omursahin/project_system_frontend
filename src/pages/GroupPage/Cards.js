@@ -64,12 +64,6 @@ const Cards = ({groups}) => {
                                                             <FaFileAlt style={{ color: 'yellow', fontSize: '3.5em' }} />
                                                         ) : null}
                                                     </div>
-                                                    <div className="text-md-center">
-
-                                                    </div>
-                                                </Stack>
-
-                                                <Stack direction="vertical" gap={3}>
                                                     <div className="text-md-center" style={{
                                                         display:'inline-block',
                                                         border:'1px solid #000',
@@ -79,10 +73,7 @@ const Cards = ({groups}) => {
                                                         Grup:
                                                         {group.id}
                                                     </div>
-                                                    <div className="text-md-center">
-
-                                                    </div>
-                                                </Stack>
+                                              </Stack>
                                             </Col>
                                         </Row>
                                     </Container>
