@@ -1,20 +1,35 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Table from '../../components/general/Table';
-import { Button } from 'react-bootstrap';
-import { TrashFill } from 'react-bootstrap-icons';
+import {Button} from 'react-bootstrap';
+import {TrashFill} from 'react-bootstrap-icons';
 import CourseModal from './CourseModal';
 import ConfirmModal from '../../components/general/Modal/ConfirmModal';
 import {notificationActions} from "../../store/notification/notification-slice";
 import {useDispatch} from "react-redux";
-import {useGetAllCoursesQuery} from "../../store/api/courses";
+import {useCourseRemoveMutation, useGetAllCoursesQuery} from "../../store/api/courses";
 
 export const CoursesPage = () => {
+    const dispatch = useDispatch();
 
-  const { data: courses, isLoading } = useGetAllCoursesQuery();
+    const [remove, isSuccess] = useCourseRemoveMutation();
+    const {data: courses, isLoading} = useGetAllCoursesQuery();
 
-  const handleDelete = async (id) => {
-      alert(id);
-  };
+    const handleDelete = async (id) => {
+        await remove(id);
+        if (isSuccess) {
+            dispatch(notificationActions.showMessage({
+                header: "Giriş",
+                message: "Başarı ile silindi...",
+                variant: "success"
+            }));
+        } else {
+            dispatch(notificationActions.showMessage({
+                header: "Hata",
+                message: "Bir hata ile karşılaşıldı...",
+                variant: "danger"
+            }));
+        }
+    };
 
   return (
     <>
@@ -56,4 +71,5 @@ export const CoursesPage = () => {
       </div>
     </>
   );
+
 };

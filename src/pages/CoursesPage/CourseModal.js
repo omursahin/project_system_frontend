@@ -3,10 +3,20 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import { PlusSquareDotted, PencilFill } from 'react-bootstrap-icons';
+import {useDispatch} from "react-redux";
+
+import {useCourseCreateMutation, useCourseUpdateMutation} from "../../store/api/courses";
+import {notificationActions} from "../../store/notification/notification-slice";
 
 function CourseModal({ isEdit = false, data = {} }) {
 
+    const [code, setCode] = useState(data?.code);
+    const [title, setTitle] = useState(data?.title);
+    const [description, setDescription] = useState(data?.description);
+    const dispatch = useDispatch();
 
+    const [update] = useCourseUpdateMutation();
+    const [create] = useCourseCreateMutation();
 
     const [show, setShow] = useState(false);
 
@@ -16,29 +26,38 @@ function CourseModal({ isEdit = false, data = {} }) {
     const save = async () => {
         let response = null;
         if (data?.id) {
-            // Güncelleme
-            alert("Güncelleme")
-
+            const payload = {
+                id: data.id,
+                code,
+                title,
+                description
+            };
+            response = await update(payload);
         } else {
-            // Yeni veri ekleme
-            alert("Yeni veri ekleme")
+            const payload = {
+                code,
+                title,
+                description
+            };
+            response = await create(payload);
         }
 
-        // if (response.error) {
-        //     dispatch(notificationActions.showMessage({
-        //         header: "Hata",
-        //         message: "Bir hata ile karşılaşıldı...",
-        //         variant: "danger"
-        //     }));
-        // } else {
-        //     dispatch(notificationActions.showMessage({
-        //         header: "Giriş",
-        //         message: "Başarı ile eklendi/güncellendi",
-        //         variant: "success"
-        //     }));
-        // }
+        if (response.error) {
+            dispatch(notificationActions.showMessage({
+                header: "Hata",
+                message: "Bir hata ile karşılaşıldı...",
+                variant: "danger"
+            }));
+        } else {
+            dispatch(notificationActions.showMessage({
+                header: "Giriş",
+                message: "Başarı ile eklendi/güncellendi",
+                variant: "success"
+            }));
+        }
         setShow(false);
     };
+
 
     return (
         <>
@@ -56,23 +75,40 @@ function CourseModal({ isEdit = false, data = {} }) {
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
-                        <Form.Group className="mb-3" controlId="term">
-                            <Form.Label>Dönem</Form.Label>
-                            <Form.Select aria-label="term" value={data?.term} onChange={(e) => {}}>
-                                <option value={0}>Güz</option>
-                                <option value={1}>Bahar</option>
-                                <option value={2}>Yaz</option>
-                            </Form.Select>
-                        </Form.Group>
+
                         <Form.Group
                             className="mb-3"
-                            controlId="year"
+                            controlId="code"
                         >
-                            <Form.Label>Yıl</Form.Label>
+                            <Form.Label>Kod</Form.Label>
                             <Form.Control
-                                onChange={(e) => {}}
-                                type="number"
-                                value={data?.year || ''}
+                                onChange={(e) => setCode(e.target.value)}
+                                type="text"
+                                value={code || ''}
+                            />
+                        </Form.Group>
+
+                        <Form.Group
+                            className="mb-3"
+                            controlId="title"
+                        >
+                            <Form.Label>Başlık</Form.Label>
+                            <Form.Control
+                                onChange={(e) => setTitle(e.target.value)}
+                                type="text"
+                                value={title || ''}
+                            />
+                        </Form.Group>
+
+                        <Form.Group
+                            className="mb-3"
+                            controlId="description"
+                        >
+                            <Form.Label>Açıklama</Form.Label>
+                            <Form.Control
+                                onChange={(e) => setDescription(e.target.value)}
+                                type="text"
+                                value={description || ''}
                             />
                         </Form.Group>
                     </Form>

@@ -17,6 +17,8 @@ import {SemestersPage} from "./pages/SemestersPage";
 import {CoursesPage} from "./pages/CoursesPage";
 import {SemesterCoursePage} from "./pages/SemesterCoursePage";
 import {ReportPage} from "./pages/ReportPage";
+import {GroupPage} from "./pages/GroupPage";
+import {GroupDetailPage} from "./pages/GroupDetailPage";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -57,6 +59,14 @@ const router = createBrowserRouter([
             {
                 path: "/reports",
                 element: <ReportPage/>
+            },
+            {
+                path: "/groups",
+                element: <GroupPage/>
+            },
+            {
+                path: "/groups/:id",
+                element: <GroupDetailPage/>
             },
         ]
     }]);

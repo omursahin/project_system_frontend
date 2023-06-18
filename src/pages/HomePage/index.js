@@ -12,5 +12,9 @@ export const HomePage = () => {
         <Link to={"/semester_courses"}>Semester Courses</Link>
         <br/>
         <Link to={"/reports"}>Reports</Link>
+        <br/>
+        <Link to={"/groups"}>Groups</Link>
+        <br/>
+        <Link to={"/groups/1"}>Group Detail</Link>
     </>
 }
