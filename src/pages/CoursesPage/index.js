@@ -31,47 +31,45 @@ export const CoursesPage = () => {
         }
     };
 
-    console.log(courses);
-    return (
-        <>
-            <div>
-                {courses?.results && !isLoading ? (
-                    <Table
-                        tableTitle="Ders Listesi"
-                        searchable={true}
-                        addNewEntry={<CourseModal/>}
-                        head={[
-                            {name: 'ID', sortable: 'numeric', width: 1},
-                            {name: 'Kod'},
-                            {name: 'Başlık'},
-                            {name: 'Açıklama'},
-                            {name: 'Eylem', width: 1},
-                        ]}
-                        body={courses.results.map((course) => [
-                            course.id,
-                            course.code,
-                            course.title,
-                            course.description,
-                            <>
-                                <CourseModal isEdit={true} data={course}/>
-                                <ConfirmModal
-                                    title="Dönem Silme"
-                                    body="Bu dönemi silmek istediğinizden emin misiniz?"
-                                    onConfirm={() => handleDelete(course.id)}
-                                    btn={
-                                        <>
-                                            <TrashFill size={15}/>
-                                            <span className="d-none d-md-block">Sil</span>
-                                        </>
-                                    }
-                                />
-                            </>,
-                        ])}
-                    />
-                ) : (
-                    'Loading...'
-                )}
-            </div>
-        </>
-    );
+  return (
+    <>
+      <div>
+        {courses?.results && !isLoading ? (
+          <Table
+            tableTitle="Ders Listesi"
+            searchable={true}
+            addNewEntry={<CourseModal />}
+            head={[
+              { name: 'ID', sortable: 'numeric', width: 1 },
+              { name: 'Dönem', sortable: 'alpha' },
+              { name: 'Yıl', sortable: 'numeric' },
+              { name: 'Eylem', width: 1 },
+            ]}
+            body={courses.results.map((course) => [
+              course.id,
+              ['Güz', 'Bahar', 'Yaz'][course.term],
+              `${course.year} - ${course.year + 1}`,
+              <>
+                <CourseModal isEdit={true} data={course} />
+                <ConfirmModal
+                  title="Dönem Silme"
+                  body="Bu dönemi silmek istediğinizden emin misiniz?"
+                  onConfirm={() => handleDelete(course.id)}
+                  btn={
+                    <>
+                      <TrashFill size={15} />
+                      <span className="d-none d-md-block">Sil</span>
+                    </>
+                  }
+                />
+              </>,
+            ])}
+          />
+        ) : (
+          'Loading...'
+        )}
+      </div>
+    </>
+  );
+
 };
