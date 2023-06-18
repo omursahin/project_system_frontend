@@ -11,6 +11,7 @@ export const GroupProjectsSection = ({ group }) => {
             <ListGroup.Item
               as="li"
               className="d-flex justify-content-between align-items-start"
+              key={project.id}
             >
               <div className="ms-2 me-auto">
                 <div className="fw-bold">{project.title}</div>

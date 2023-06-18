@@ -8,18 +8,16 @@ export const GroupMembersSection = ({ group, groupMemberAdded = () => { }, group
   const [removeGroupMember] = useGroupMemberRemoveMutation();
 
   const removeMember = (memberId) => async () => {
-    // TODO: implement
     await removeGroupMember(memberId);
     groupMemberRemoved();
   }
-
   return (
     <Card className='mt-3'>
       <Card.Header>
         <div className="d-flex justify-content-between align-items-center">
           <div>Grup Üyeleri</div>
           <div>
-            <GroupMemberAddModal groupId={group.id} added={groupMemberAdded} />
+            <GroupMemberAddModal semesterCourseId={group.semester_course.id} groupId={group.id} added={groupMemberAdded} />
           </div>
         </div>
       </Card.Header>
@@ -29,6 +27,7 @@ export const GroupMembersSection = ({ group, groupMemberAdded = () => { }, group
             <ListGroup.Item
               as="li"
               className="d-flex justify-content-between align-items-center"
+              key={member.id}
             >
               {member?.is_accepted ? <CheckCircleFill className="text-success" /> : <XCircleFill className="text-danger" />}
               <div className="ms-3 me-auto">
